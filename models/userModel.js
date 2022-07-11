@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: [true, 'user must have a group email'],
+    required: [false, 'user must have a group email'],
     unique: true,
     lowercase: true,
     validate: [validator.isEmail, 'please provide a valid email'],

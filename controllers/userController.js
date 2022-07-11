@@ -3,6 +3,14 @@ const AppError = require('../utils/appError');
 // const APIFeatures = require('../utils/apiFeatures');
 // const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
+const factory = require('./handlerFactory');
+
+exports.getUser = factory.getOne(User);
+// do not update password with this!
+exports.updateUser = factory.updateOne(User);
+exports.getAllUsers = factory.getAll(User);
+
+exports.deleteUser = factory.deleteOne(User);
 
 const filterObj = (obj, ...allowedArguments) => {
   const newObj = {};
@@ -14,30 +22,12 @@ const filterObj = (obj, ...allowedArguments) => {
   return newObj;
 };
 
-exports.getUser = (req, res) => {
-  res.status(500).json({
-    status: 'errror',
-    message: 'this route is not yet build.',
-  });
-};
 exports.createUser = (req, res) => {
   res.status(500).json({
     status: 'errror',
-    message: 'this route is not yet build.',
+    message: 'this route is not yet build. Plase use /signup instad',
   });
 };
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const user = await User.find();
-
-  // send response
-  res.status(200).json({
-    status: 'success',
-    results: user.length,
-    data: {
-      user,
-    },
-  });
-});
 
 exports.deleteMe = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false });
@@ -68,15 +58,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'errror',
-    message: 'this route is not yet build.',
-  });
-};
-exports.deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'errror',
-    message: 'this route is not yet build.',
-  });
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
 };
