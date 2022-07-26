@@ -21,7 +21,7 @@ exports.getTour = catchAsync(async (req, res, next) => {
     fields: 'review rating user',
   });
 
-  if (tour) {
+  if (!tour) {
     return next(new AppError('there is no tour with that name.', 404));
   }
 
@@ -50,6 +50,7 @@ exports.getAccount = (req, res) => {
 };
 
 exports.updateUserData = catchAsync(async (req, res, next) => {
+  console.log(req.body);
   const updatedUser = await User.findByIdAndUpdate(
     req.user.id,
     {

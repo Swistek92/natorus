@@ -77,7 +77,7 @@ exports.logout = catchAsync(async (req, res, next) => {
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
-  //1) getting token and check of its there
+  // 1) Getting token and check of it's there
   let token;
   if (
     req.headers.authorization &&
@@ -87,28 +87,37 @@ exports.protect = catchAsync(async (req, res, next) => {
   } else if (req.cookies.jwt) {
     token = req.cookies.jwt;
   }
+
   if (!token) {
     return next(
-      new AppError('you are not logged in! please login to get access.', 401)
+      new AppError('You are not logged in! Please log in to get access.', 401)
     );
   }
 
-  // 2.  veryfication validate token
-
+  // 2) Verification token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  //3 . check if user still exists
-  const freshUser = await User.findById(decoded.id);
-  if (!freshUser) {
-    return next(new AppError('the user not longer exist', 401));
-  }
-  //4. check if user charnged password after the JWT was issued
-  if (freshUser.changedPasswordAfter(decoded.iat)) {
+
+  // 3) Check if user still exists
+  const currentUser = await User.findById(decoded.id);
+  if (!currentUser) {
     return next(
-      new AppError('user recently changed password, plase login again', 401)
+      new AppError(
+        'The user belonging to this token does no longer exist.',
+        401
+      )
     );
   }
-  //acces to protected route
-  req.user = freshUser;
+
+  // 4) Check if user changed password after the token was issued
+  if (currentUser.changedPasswordAfter(decoded.iat)) {
+    return next(
+      new AppError('User recently changed password! Please log in again.', 401)
+    );
+  }
+
+  // GRANT ACCESS TO PROTECTED ROUTE
+  req.user = currentUser;
+  res.locals.user = currentUser;
   next();
 });
 
