@@ -5,7 +5,7 @@
     "sourceType": "module"
   },
   "rules": {
-    "prettier/prettier": ["error", { "endOfLine": "crlf" }],
+    "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "spaced-comment": "off",
     "no-console": "warn",
     "consistent-return": "off",
