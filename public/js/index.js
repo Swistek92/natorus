@@ -14,15 +14,13 @@ const userPasswordForm = document.querySelector('.form-user-password');
 const bookBtn = document.getElementById('book-tour');
 
 if (bookBtn) {
-  console.log('AAAAAAAAAAAAAAAAAAAA');
+  console.log('book btn');
   bookBtn.addEventListener('click', (e) => {
-    console.log('asd');
     e.target.textContent = 'Processing...';
     const { tourId } = e.target.dataset;
     bookTour(tourId);
   });
 }
-
 if (userPasswordForm) {
   userPasswordForm.addEventListener('submit', async (e) => {
     e.preventDefault();
