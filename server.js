@@ -24,7 +24,7 @@ mongoose
 // .catch((err) => console.log('ERROR'));
 
 const port = process.env.PORT || 8000;
-// console.log(process.env);
+// console.log(process.envs);
 const server = app.listen(port, () => {
   console.log(`serv listen on 3000`);
 });
